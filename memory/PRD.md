@@ -77,6 +77,9 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Programmatic: coda cursor computed `animation-name` switches `cursor-blink` → `cursor-heartbeat` in the fade zone.
 - NOT verified by ear: hum/piano audio output (no audio capture possible in screenshot tooling); the graph builds and schedules correctly in code.
 
+## Deployment
+- 2026-07: Deployment-agent health check — PASS, zero blockers (env config, CORS, supervisor, queries, no hardcoded secrets/ports). Ready for Emergent Kubernetes deployment (250m CPU / 1Gi / 2 replicas).
+
 ## Backlog
 - P2: Hash deep-link to replay from the coda.
 - P2: og-image refresh automation if the hero typography changes.
