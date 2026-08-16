@@ -140,6 +140,17 @@ body {
     50%, 100% { opacity: 0; }
 }
 
+@keyframes cursor-heartbeat {
+    0% { opacity: 1; }
+    12% { opacity: 0.12; }
+    22% { opacity: 1; }
+    36% { opacity: 0.12; }
+    50% { opacity: 1; }
+    74% { opacity: 1; }
+    75% { opacity: 0; }
+    100% { opacity: 0; }
+}
+
 .coda-dots {
     display: inline-block;
     overflow: hidden;

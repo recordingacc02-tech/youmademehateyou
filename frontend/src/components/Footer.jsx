@@ -21,6 +21,13 @@ export const Footer = ({ count }) => (
     >
       pass this notice on
     </button>
+    <button
+      data-testid="replay-button"
+      onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      className="font-mono-notice text-[9px] tracking-[0.3em] uppercase text-[#3d3d3d] hover:text-[#8a7a6a] transition-colors duration-300"
+    >
+      read it again
+    </button>
     <p className="font-mono-notice text-[9px] tracking-[0.25em] uppercase text-[#2e2e2e]">
       — r
     </p>

@@ -41,7 +41,7 @@ export const CinematicExperience = ({ count }) => {
           { x: '30vw', y: '-26vh', rotate: 9, opacity: 0, duration: 1.5, ease: 'power1.in' },
           0.8
         )
-        .to('.letter-r', { x: '9vw', color: GREY, duration: 1.4 }, 1.0)
+        .to('.letter-r', { x: '12vw', color: GREY, duration: 1.4 }, 1.0)
         .fromTo(
           '.dissolve-caption',
           { autoAlpha: 0, y: 20 },
@@ -139,6 +139,7 @@ export const CinematicExperience = ({ count }) => {
         .to('.coda-line-2', { autoAlpha: 0, duration: 0.7 }, 5.4)
         .fromTo('.coda-line-3', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8 }, 6.0)
         .fromTo('.coda-dots', { width: 0 }, { width: '4.2em', duration: 1.6, ease: 'steps(16)' }, 6.8)
+        .set('.coda-cursor', { css: { animationName: 'cursor-heartbeat', animationDuration: '1.3s' } }, 8.5)
         .to('.coda-line-3', { autoAlpha: 0, duration: 1.2 }, 9.2)
         .to({}, { duration: 0.8 }, 10.4);
     }, rootRef);
@@ -160,19 +161,19 @@ export const CinematicExperience = ({ count }) => {
             className="flex items-baseline font-serif-human font-light leading-none tracking-tighter text-[#E8D8C8]"
             data-testid="hero-letters"
           >
-            <span className="letter-r text-[24vw] md:text-[17vw]" data-testid="letter-r">R</span>
-            <span className="letter-amp text-[8vw] md:text-[5vw] italic mx-[1.5vw] opacity-70">&amp;</span>
-            <span className="letter-s text-[24vw] md:text-[17vw]" data-testid="letter-s">S</span>
+            <span className="letter-r text-[42vw] md:text-[min(27vw,64vh)]" data-testid="letter-r">R</span>
+            <span className="letter-amp text-[13vw] md:text-[min(8vw,19vh)] italic mx-[1.5vw] opacity-70">&amp;</span>
+            <span className="letter-s text-[42vw] md:text-[min(27vw,64vh)]" data-testid="letter-s">S</span>
           </div>
         </div>
         <p
-          className="tagline absolute inset-x-0 top-[64%] text-center font-serif-human italic font-light text-lg md:text-2xl text-[#C5B2A1]/80 px-6"
+          className="tagline absolute inset-x-0 top-[70%] md:top-[78%] text-center font-serif-human italic font-light text-xl md:text-3xl text-[#C5B2A1]/80 px-6"
           data-testid="hero-tagline"
         >
           {SCRIPT.tagline}
         </p>
         <p
-          className="dissolve-caption absolute inset-x-0 top-[68%] text-center font-mono-notice text-[11px] md:text-sm tracking-[0.18em] text-white/90 px-6 opacity-0"
+          className="dissolve-caption absolute inset-x-0 top-[77%] md:top-[85%] text-center font-mono-notice text-xs md:text-base tracking-[0.18em] text-white/90 px-6 opacity-0"
           data-testid="dissolve-caption"
         >
           {SCRIPT.dissolveCaption}
@@ -186,10 +187,10 @@ export const CinematicExperience = ({ count }) => {
 
       <section className="scene-warning relative h-screen w-full overflow-hidden" data-testid="scene-warning">
         <div className="notice-chrome absolute top-0 inset-x-0 flex justify-between pl-6 md:pl-10 pr-20 pt-6 opacity-0">
-          <span className="font-mono-notice text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40">
+          <span className="font-mono-notice text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/40">
             {SCRIPT.chromeLeft}
           </span>
-          <span className="font-mono-notice text-[9px] md:text-[10px] tracking-[0.3em] uppercase text-white/40 hidden sm:inline">
+          <span className="font-mono-notice text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/40 hidden sm:inline">
             {SCRIPT.chromeRight}
           </span>
         </div>
@@ -199,26 +200,26 @@ export const CinematicExperience = ({ count }) => {
             className={`warn-line warn-line-${i} absolute inset-0 flex items-center px-[8vw] md:px-[12vw] opacity-0`}
             data-testid={`warning-line-${i}`}
           >
-            <span className="font-mono-notice font-light text-sm md:text-xl leading-relaxed md:leading-loose text-white/90 max-w-[34ch] md:max-w-[46ch]">
+            <span className="font-mono-notice font-light text-base md:text-2xl leading-relaxed md:leading-loose text-white/90 max-w-[34ch] md:max-w-[46ch]">
               {line}
             </span>
           </p>
         ))}
         <p className="glitch-calm absolute inset-0 flex items-center px-[8vw] md:px-[12vw] opacity-0">
-          <span className="font-mono-notice font-light text-sm md:text-xl text-white/90">
+          <span className="font-mono-notice font-light text-base md:text-2xl text-white/90">
             {SCRIPT.glitchCalm}
           </span>
         </p>
         <p className="glitch-break absolute inset-0 flex items-center px-[8vw] md:px-[12vw] opacity-0">
           <span
-            className="glitch-crack font-mono-notice font-medium text-base md:text-2xl text-white"
+            className="glitch-crack font-mono-notice font-medium text-lg md:text-3xl text-white"
             data-testid="glitch-line"
           >
             {SCRIPT.glitchBreak}
           </span>
         </p>
         <p className="glitch-after absolute inset-0 flex items-center px-[8vw] md:px-[12vw] opacity-0">
-          <span className="font-mono-notice font-light text-xs md:text-sm text-[#555]">
+          <span className="font-mono-notice font-light text-sm md:text-base text-[#555]">
             {SCRIPT.glitchAfter}
           </span>
         </p>
@@ -232,17 +233,17 @@ export const CinematicExperience = ({ count }) => {
           R
         </span>
         <p className="mask-line-1 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="mask-line-1">
-          <span className="font-mono-notice font-light text-xs md:text-base tracking-[0.12em] leading-loose text-white/80 text-center max-w-[38ch]">
+          <span className="font-mono-notice font-light text-sm md:text-lg tracking-[0.12em] leading-loose text-white/80 text-center max-w-[38ch]">
             {SCRIPT.maskLine1}
           </span>
         </p>
         <p className="mask-line-2 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="mask-line-2">
-          <span className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed max-w-[24ch]">
+          <span className="font-serif-human font-light text-3xl md:text-5xl text-[#C5B2A1] text-center leading-relaxed max-w-[24ch]">
             {SCRIPT.maskLine2}
           </span>
         </p>
         <span
-          className="mask-r-dot absolute inset-0 flex items-center justify-center font-serif-human font-light text-[18vw] md:text-[10vw] text-[#8a7a6a] opacity-0"
+          className="mask-r-dot absolute inset-0 flex items-center justify-center font-serif-human font-light text-[26vw] md:text-[14vw] text-[#8a7a6a] opacity-0"
           data-testid="mask-r-dot"
         >
           R.
@@ -251,24 +252,24 @@ export const CinematicExperience = ({ count }) => {
 
       <section className="scene-coda relative h-screen w-full overflow-hidden bg-black" data-testid="scene-coda">
         <p className="coda-line-1 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="coda-line-1">
-          <span className="font-serif-human font-light text-xl md:text-3xl text-[#C5B2A1] text-center leading-relaxed max-w-[26ch]">
+          <span className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed max-w-[26ch]">
             {SCRIPT.coda1}
           </span>
         </p>
         <p className="coda-line-2 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="coda-line-2">
-          <span className="font-serif-human font-light text-xl md:text-3xl text-[#C5B2A1] text-center leading-relaxed">
+          <span className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed">
             {SCRIPT.coda2}
           </span>
         </p>
         <p className="coda-line-3 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="coda-line-3">
-          <span className="font-serif-human font-light text-xl md:text-3xl text-[#C5B2A1]/90 text-center leading-relaxed">
+          <span className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1]/90 text-center leading-relaxed">
             {SCRIPT.coda3}
             <span className="coda-dots">{SCRIPT.codaDots}</span>
-            <span className="cursor-blink text-[#C5B2A1]/70">|</span>
+            <span className="coda-cursor cursor-blink text-[#C5B2A1]/70">|</span>
           </span>
         </p>
         <span
-          className="final-r absolute inset-0 flex items-center justify-center font-serif-human font-light text-[16vw] md:text-[8vw] text-[#C5B2A1] opacity-0"
+          className="final-r absolute inset-0 flex items-center justify-center font-serif-human font-light text-[18vw] md:text-[10vw] text-[#C5B2A1] opacity-0"
           data-testid="final-r"
         >
           R

@@ -33,7 +33,7 @@ export const Controls = () => {
       <button
         ref={audioRef}
         data-testid="audio-toggle-button"
-        aria-label={on ? 'mute ambient hum' : 'play ambient hum'}
+        aria-label={on ? 'mute ambient sound' : 'play ambient sound'}
         aria-pressed={on}
         onClick={() => {
           press(audioRef);
