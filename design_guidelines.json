@@ -1,0 +1,81 @@
+{
+  "typography": {
+    "fonts": [
+      {
+        "family": "Cormorant Garamond",
+        "type": "serif",
+        "import_url": "https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap",
+        "usage": "Opening line, 'no one' line, coda, and the hero 'R & S' letters. Feels human, vulnerable, classic."
+      },
+      {
+        "family": "JetBrains Mono",
+        "type": "monospace",
+        "import_url": "https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;300;400&display=swap",
+        "usage": "The cold warning text, clinical voice, 'notice' type. Deadpan."
+      }
+    ],
+    "hierarchy": {
+      "hero_letters": "text-[20vw] md:text-[15vw] leading-none tracking-tighter font-serif font-light",
+      "serif_text": "text-xl md:text-2xl lg:text-3xl font-serif font-light tracking-wide leading-relaxed",
+      "mono_text": "text-xs md:text-sm font-mono tracking-[0.2em] uppercase leading-loose"
+    }
+  },
+  "colors": {
+    "background": "#030303",
+    "text": {
+      "warm": "#E8D8C8",
+      "clinical_white": "#FFFFFF",
+      "dead_grey": "#555555",
+      "faint_warm": "#C5B2A1",
+      "pure_black": "#000000"
+    }
+  },
+  "visual_enhancers": {
+    "glitch_effect": "CSS-based keyframe animation for a single split-second distortion. Add custom class '.glitch-crack' in index.css with transform: translate, skew, opacity jitter paired with a red/cyan text-shadow split.",
+    "grain": "Very subtle, low-opacity fixed SVG noise overlay (pointer-events-none) to make the black canvas feel like film or physical space.",
+    "flicker": "CSS animation alternating opacity rapidly for the final 'R' beat."
+  },
+  "layouts": {
+    "structure": "Single continuous scroll container. Use GSAP ScrollTrigger to pin sections and scrub animations. It should feel like one single canvas where elements fade in, move, and fade out as you scroll. AVOID generic sections.",
+    "spacing": "Massive scroll distances (e.g., 200vh to 400vh per beat) to create silence, pacing, and tension between lines."
+  },
+  "motion": {
+    "scroll_engine": "Lenis for smooth scrolling (momentum). GSAP ScrollTrigger for pinning and timeline scrubbing.",
+    "scene_1": "R & S centered, warm serif line below. Scroll starts -> text fades out.",
+    "scene_2": "S translates to the right/up and fades out over 100vh scroll. R remains.",
+    "scene_3": "Pinned section. Mono lines appear one by one based on scrub. Then the glitch beat fires briefly.",
+    "scene_4": "R alone. Serif lines appear with a pause (scroll gap) in between. Fade all to black.",
+    "scene_5": "Long empty scroll space (silence). Coda lines fade in gently. Last line trails off. R flickers.",
+    "accessibility": "If prefers-reduced-motion is active (window.matchMedia('(prefers-reduced-motion: reduce)')), disable GSAP ScrollTrigger pinning and fall back to a beautifully spaced, static vertical layout with standard scrolling."
+  },
+  "media": {
+    "audio": "Ambient low hum (drone). Use an invisible <audio> tag (can mock with a generic hum sound URL or oscillator). Provide a fixed bottom-right mute/unmute toggle. Off by default."
+  },
+  "dependencies": {
+    "install_commands": [
+      "yarn add gsap @gsap/react",
+      "yarn add lenis",
+      "yarn add lucide-react",
+      "yarn add sonner"
+    ]
+  },
+  "instructions_to_main_agent": [
+    "1. Build a single-page app in App.js using React, GSAP, and Tailwind CSS.",
+    "2. Add the font imports to index.css.",
+    "3. Set up Lenis in a useEffect for smooth scrolling. Provide a clean teardown on unmount.",
+    "4. Create a master GSAP ScrollTrigger timeline that pins a main container and animates elements inside it based on scrub, OR use multiple sequentially pinned sections.",
+    "5. Ensure the hero letters 'R' and 'S' are separate DOM elements so 'S' can be animated away independently while 'R' stays.",
+    "6. Implement the Glitch effect as a custom CSS class in index.css and apply it specifically to the 'I HOPE HE'S—' line during its moment.",
+    "7. Add a fixed 'Share' button (top right) that copies the URL to clipboard using navigator.clipboard, and an 'Audio' toggle (bottom right) for the ambient hum. Use 'lucide-react' icons.",
+    "8. Implement a fallback for prefers-reduced-motion using a simple media query in JS to bypass GSAP animations if true, defaulting to standard flow.",
+    "9. Use NO external images or stock imagery. Rely purely on typography, layout tension, negative space, and timing.",
+    "10. For the Share button, use `sonner` to show a 'Link copied' toast."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use generic centered layouts for everything; use optical alignment and intentional asymmetry.",
+    "Avoid the 'AI slop' aesthetic. Be deliberate with every pixel and animation.",
+    "Use data-testid on interactive elements (e.g., Share button, Audio toggle).",
+    "Focus heavily on the pacing of the scroll—do not cram the animations together. Leave vast empty space.",
+    "Ensure mobile responsiveness: text scales down, but spacing remains generous."
+  ]
+}

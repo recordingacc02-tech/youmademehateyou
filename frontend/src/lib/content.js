@@ -1,0 +1,22 @@
+export const SCRIPT = {
+  tagline: 'This used to mean something.',
+  dissolveCaption: 'Then she found someone younger to practice on.',
+  chromeLeft: 'hazard notice — file r/s',
+  chromeRight: 'classification: public service',
+  warningLines: [
+    "So there's a new boy now. I missed it, honestly. Good for her.",
+    "I feel bad for him. Genuinely. He's too young to understand what he walked into.",
+    "He thinks it's a girlfriend. It's a countdown.",
+    "She's not dangerous on purpose. That's the scary part. She's just... too much. Too easy to fall for. He never had a chance.",
+    "Poor kid. He's already gone. He just doesn't know it yet.",
+  ],
+  glitchCalm: "I hope he's happy.",
+  glitchBreak: "I HOPE HE'S—",
+  glitchAfter: "i hope he's happy.",
+  maskLine1: 'You probably think this was written by someone who mattered to her.',
+  maskLine2: 'Well... I was just a no one. Just like everyone.',
+  coda1: '...but still, if I see her sometime, my heart jumps.',
+  coda2: 'Just once. And only once.',
+  coda3: "Because after that, it's not",
+  codaDots: '................',
+};
