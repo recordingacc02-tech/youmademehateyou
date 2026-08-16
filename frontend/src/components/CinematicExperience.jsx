@@ -10,7 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 const GREY = '#555555';
 
-export const CinematicExperience = ({ count }) => {
+export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
   const rootRef = useRef(null);
   const progressRef = useRef(null);
   const flickerPlayed = useRef(false);
@@ -159,6 +159,14 @@ export const CinematicExperience = ({ count }) => {
         onEnter: clack,
       });
 
+      ScrollTrigger.create({
+        trigger: '.scene-coda',
+        start: 'top top',
+        onEnter: () => {
+          if (onCodaReached) onCodaReached();
+        },
+      });
+
       if (window.location.hash === '#coda') {
         const jumpToCoda = () => {
           ScrollTrigger.refresh();
@@ -305,6 +313,7 @@ export const CinematicExperience = ({ count }) => {
 
       <Footer
         count={count}
+        codaCount={codaCount}
         onSkipToCoda={() => {
           window.history.replaceState(null, '', '#coda');
           if (codaTriggerRef.current) {

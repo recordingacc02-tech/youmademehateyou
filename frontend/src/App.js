@@ -4,13 +4,16 @@ import { Toaster } from '@/components/ui/sonner';
 import { CinematicExperience } from '@/components/CinematicExperience';
 import { StaticExperience } from '@/components/StaticExperience';
 import { Controls } from '@/components/Controls';
+import { clack } from '@/lib/ambient';
 import '@/App.css';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
 let viewCounted = false;
+let codaCounted = false;
 
 function App() {
   const [count, setCount] = useState(null);
+  const [codaCount, setCodaCount] = useState(null);
   const [reduced] = useState(
     () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
   );
@@ -20,14 +23,37 @@ function App() {
     viewCounted = true;
     axios
       .post(`${API}/views`)
-      .then((r) => setCount(r.data.count))
+      .then((r) => {
+        setCount(r.data.count);
+        setCodaCount(r.data.coda);
+      })
       .catch(() => {});
   }, []);
+
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.metaKey || e.ctrlKey || e.altKey) return;
+      clack();
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  const handleCodaReached = () => {
+    if (codaCounted) return;
+    codaCounted = true;
+    axios
+      .post(`${API}/views/coda`)
+      .then((r) => setCodaCount(r.data.coda))
+      .catch(() => {});
+  };
+
+  const shared = { count, codaCount, onCodaReached: handleCodaReached };
 
   return (
     <div className="App" data-testid="app-root">
       <div className="grain-overlay" aria-hidden="true" />
-      {reduced ? <StaticExperience count={count} /> : <CinematicExperience count={count} />}
+      {reduced ? <StaticExperience {...shared} /> : <CinematicExperience {...shared} />}
       <Controls />
       <Toaster
         theme="dark"

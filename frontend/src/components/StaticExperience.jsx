@@ -1,7 +1,26 @@
+import { useEffect } from 'react';
 import { SCRIPT } from '../lib/content';
 import { Footer } from './Footer';
 
-export const StaticExperience = ({ count }) => (
+export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
+  useEffect(() => {
+    if (!onCodaReached) return undefined;
+    const el = document.querySelector('[data-testid="scene-coda"]');
+    if (!el) return undefined;
+    const obs = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          onCodaReached();
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.15 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [onCodaReached]);
+
+  return (
   <main className="bg-[#030303] text-[#E8D8C8]" data-testid="static-experience">
     <section className="min-h-screen flex flex-col items-center justify-center gap-10 px-6" data-testid="scene-letters">
       <div
@@ -64,6 +83,7 @@ export const StaticExperience = ({ count }) => (
       </p>
     </section>
 
-    <Footer count={count} />
+    <Footer count={count} codaCount={codaCount} />
   </main>
-);
+  );
+};

@@ -1,6 +1,6 @@
 import { shareNotice, shareCoda } from '../lib/share';
 
-export const Footer = ({ count, onSkipToCoda }) => (
+export const Footer = ({ count, codaCount, onSkipToCoda }) => (
   <footer
     className="relative bg-black min-h-[55vh] flex flex-col items-center justify-center gap-7 px-6"
     data-testid="notice-footer"
@@ -13,6 +13,11 @@ export const Footer = ({ count, onSkipToCoda }) => (
       data-testid="view-counter"
     >
       filed anonymously{count != null ? ` · witnessed ${count} times` : ''}
+      {codaCount != null && (
+        <span className="text-[8px] md:text-[9px] tracking-[0.2em] text-[#3a3a3a]" data-testid="coda-counter">
+          {' '}· {codaCount} reached the coda
+        </span>
+      )}
     </p>
     <button
       data-testid="footer-share-button"

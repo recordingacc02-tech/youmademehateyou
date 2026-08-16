@@ -49,6 +49,11 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Every warning line now lands with its own faint key-clack (timeline calls in the scrubbed warning scene, slight random pitch jitter per clack so it sounds like real typing); fires forward and on scroll-back, silent unless ambient sound is on.
 - Hardened clipboard sharing with an execCommand fallback (navigator.clipboard can be blocked without a trusted gesture).
 
+### 2026-07 (iteration 5 — user requested)
+- Coda read receipts: second counter (`coda_reaches` doc, `POST /api/views/coda`) fires once per visit when the coda scene is actually reached (ScrollTrigger onEnter in cinematic, IntersectionObserver in static). `GET/POST /api/views` now return `{count, coda}`. Footer shows it smaller and dimmer beside the witness count: "witnessed N times · M reached the coda".
+- Spacebar typewriter: every keypress anywhere on the page fires a soft clack (variation built in) while ambient sound is on; modifier shortcuts (cmd/ctrl/alt) are ignored. No-op when sound is off.
+- Both counters reset to 0 after verification.
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).

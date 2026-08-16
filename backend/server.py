@@ -19,6 +19,16 @@ app = FastAPI()
 api_router = APIRouter(prefix="/api")
 
 COUNTER_ID = "page_views"
+CODA_COUNTER_ID = "coda_reaches"
+
+
+async def read_counts():
+    views = await db.counters.find_one({"_id": COUNTER_ID})
+    coda = await db.counters.find_one({"_id": CODA_COUNTER_ID})
+    return {
+        "count": views["count"] if views else 0,
+        "coda": coda["count"] if coda else 0,
+    }
 
 
 @api_router.get("/")
@@ -28,19 +38,19 @@ async def root():
 
 @api_router.get("/views")
 async def get_views():
-    doc = await db.counters.find_one({"_id": COUNTER_ID})
-    return {"count": doc["count"] if doc else 0}
+    return await read_counts()
 
 
 @api_router.post("/views")
 async def increment_views():
-    doc = await db.counters.find_one_and_update(
-        {"_id": COUNTER_ID},
-        {"$inc": {"count": 1}},
-        upsert=True,
-        return_document=ReturnDocument.AFTER,
-    )
-    return {"count": doc["count"]}
+    await db.counters.update_one({"_id": COUNTER_ID}, {"$inc": {"count": 1}}, upsert=True)
+    return await read_counts()
+
+
+@api_router.post("/views/coda")
+async def increment_coda_reaches():
+    await db.counters.update_one({"_id": CODA_COUNTER_ID}, {"$inc": {"count": 1}}, upsert=True)
+    return await read_counts()
 
 
 app.include_router(api_router)
