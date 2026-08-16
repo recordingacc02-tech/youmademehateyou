@@ -1,4 +1,5 @@
 import { shareNotice, shareCoda } from '../lib/share';
+import { SCRIPT } from '../lib/content';
 
 export const Footer = ({ count, codaCount, onSkipToCoda }) => (
   <footer
@@ -57,6 +58,14 @@ export const Footer = ({ count, codaCount, onSkipToCoda }) => (
     >
       pass on just the ending
     </button>
+    {SCRIPT.dedication && (
+      <p
+        className="font-serif-human italic font-light text-base text-[#4a4036]"
+        data-testid="dedication-line"
+      >
+        {SCRIPT.dedication}
+      </p>
+    )}
     <p className="font-mono-notice text-[9px] tracking-[0.25em] uppercase text-[#2e2e2e]">
       — r
     </p>

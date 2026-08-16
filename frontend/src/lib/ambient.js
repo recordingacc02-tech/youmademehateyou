@@ -153,6 +153,73 @@ export const onAmbientChange = (fn) => {
   return () => listeners.delete(fn);
 };
 
+let rainOn = false;
+let rainGain = null;
+
+const makeRain = () => {
+  const len = ctx.sampleRate * 2;
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
+  const data = buf.getChannelData(0);
+  let last = 0;
+  for (let i = 0; i < len; i += 1) {
+    const white = Math.random() * 2 - 1;
+    last = last * 0.94 + white * 0.06;
+    data[i] = last * 2.2 + white * 0.12;
+  }
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.loop = true;
+  const lp = ctx.createBiquadFilter();
+  lp.type = 'lowpass';
+  lp.frequency.value = 1100;
+  rainGain = ctx.createGain();
+  rainGain.gain.value = 0;
+  src.connect(lp);
+  lp.connect(rainGain);
+  rainGain.connect(master);
+  src.start();
+};
+
+export const rainIsOn = () => rainOn;
+
+export const toggleRain = () => {
+  if (!ctx || !on) return rainOn;
+  if (!rainGain) makeRain();
+  const now = ctx.currentTime;
+  rainGain.gain.cancelScheduledValues(now);
+  rainGain.gain.setValueAtTime(rainGain.gain.value, now);
+  rainOn = !rainOn;
+  rainGain.gain.linearRampToValueAtTime(rainOn ? 0.05 : 0, now + 2);
+  notify();
+  return rainOn;
+};
+
+let crackleOn = false;
+let crackleTimer = null;
+
+const schedulePop = () => {
+  if (!crackleOn) return;
+  if (on && ctx) {
+    noiseBurst(ctx.currentTime + 0.01, {
+      freq: 2400 + Math.random() * 2600,
+      q: 2.5,
+      gain: 0.015 + Math.random() * 0.03,
+      dur: 0.012 + Math.random() * 0.02,
+    });
+  }
+  crackleTimer = setTimeout(schedulePop, 60 + Math.random() * 400);
+};
+
+export const setCrackle = (v) => {
+  if (v === crackleOn) return;
+  crackleOn = v;
+  if (v) {
+    crackleTimer = setTimeout(schedulePop, 120);
+  } else if (crackleTimer) {
+    clearTimeout(crackleTimer);
+  }
+};
+
 const noiseBurst = (t, { freq, q, gain, dur }) => {
   const len = Math.floor(ctx.sampleRate * dur);
   const buf = ctx.createBuffer(1, len, ctx.sampleRate);

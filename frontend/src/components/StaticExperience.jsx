@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { SCRIPT } from '../lib/content';
+import { setCrackle } from '../lib/ambient';
 import { Footer } from './Footer';
 
 export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
@@ -11,6 +12,7 @@ export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
       (entries) => {
         if (entries[0].isIntersecting) {
           onCodaReached();
+          setCrackle(true);
           obs.disconnect();
         }
       },

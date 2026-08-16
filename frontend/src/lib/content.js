@@ -19,4 +19,5 @@ export const SCRIPT = {
   coda2: 'Just once. And only once.',
   coda3: "Because after that, it's not",
   codaDots: '................',
+  dedication: 'for s., obviously.',
 };

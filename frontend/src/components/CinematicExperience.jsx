@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate } from 'animejs';
 import { SCRIPT } from '../lib/content';
-import { clack } from '../lib/ambient';
+import { clack, setCrackle } from '../lib/ambient';
 import { Footer } from './Footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -23,6 +23,30 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         ease: 'none',
         scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
       });
+
+      const typeLine = (tl, selector, text, at, dur) => {
+        const el = rootRef.current.querySelector(selector);
+        if (!el) return;
+        el.textContent = '';
+        const state = { n: 0 };
+        let prev = 0;
+        tl.to(
+          state,
+          {
+            n: text.length,
+            duration: dur,
+            ease: 'none',
+            onUpdate: () => {
+              const count = Math.round(state.n);
+              if (count === prev) return;
+              el.textContent = text.slice(0, count);
+              if (count > prev) clack();
+              prev = count;
+            },
+          },
+          at
+        );
+      };
 
       // SCENE 1 — the letters + the dissolve
       const s1 = gsap.timeline({
@@ -53,6 +77,7 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .to('.dissolve-caption', { autoAlpha: 0, y: -16, duration: 0.5 }, 2.9)
         .to('.letter-r', { opacity: 0, duration: 0.5 }, 3.1)
         .to({}, { duration: 0.4 }, 3.6);
+      typeLine(s1, '.dissolve-caption', SCRIPT.dissolveCaption, 2.05, 0.7);
 
       // SCENE 2 — the warning to the new boy
       const s2 = gsap.timeline({
@@ -71,15 +96,15 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         { opacity: 1, scale: 1, duration: 0.18, ease: 'power4.out' },
         0
       );
-      SCRIPT.warningLines.forEach((_, i) => {
+      SCRIPT.warningLines.forEach((line, i) => {
         const at = 0.6 + i * 1.9;
-        s2.call(() => clack(), [], at + 0.12);
         s2.fromTo(
           `.warn-line-${i}`,
           { autoAlpha: 0, y: 26 },
           { autoAlpha: 1, y: 0, duration: 0.55, ease: 'power2.out' },
           at
         ).to(`.warn-line-${i}`, { autoAlpha: 0, y: -18, duration: 0.4, ease: 'power2.in' }, at + 1.45);
+        typeLine(s2, `.warn-line-${i} span`, line, at + 0.1, 1.1);
       });
       const g0 = 0.6 + SCRIPT.warningLines.length * 1.9 + 0.3;
       s2.fromTo('.glitch-calm', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5 }, g0)
@@ -90,6 +115,7 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .to('.glitch-after', { autoAlpha: 0, duration: 0.4 }, g0 + 2.6)
         .to('.notice-chrome', { opacity: 0, duration: 0.4 }, g0 + 2.7)
         .to({}, { duration: 0.3 }, g0 + 3.0);
+      typeLine(s2, '.glitch-calm span', SCRIPT.glitchCalm, g0 + 0.05, 0.7);
 
       // SCENE 3 — the mask slips
       const s3 = gsap.timeline({
@@ -117,6 +143,7 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .to('.ghost-r', { opacity: 0, duration: 0.4 }, 5.6)
         .to('.mask-r-dot', { autoAlpha: 0, duration: 0.8 }, 6.8)
         .to({}, { duration: 0.6 }, 7.6);
+      typeLine(s3, '.mask-line-1 span', SCRIPT.maskLine1, 0.8, 1.4);
 
       // SCENE 4 — fake end, long silence, the coda
       const s4 = gsap.timeline({
@@ -164,7 +191,9 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         start: 'top top',
         onEnter: () => {
           if (onCodaReached) onCodaReached();
+          setCrackle(true);
         },
+        onLeaveBack: () => setCrackle(false),
       });
 
       if (window.location.hash === '#coda') {

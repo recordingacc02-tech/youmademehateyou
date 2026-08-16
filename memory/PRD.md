@@ -59,6 +59,12 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Witness ratio whisper: when witnesses ≥ 10 and fewer than half reach the coda, the footer adds a near-invisible line — "most don't make it to the end".
 - Distinct editing clacks: Backspace is a lower, duller crunch; Enter is a heavier knock followed by a carriage-return thock; all other keys keep the standard clack.
 
+### 2026-07 (iteration 7 — user requested)
+- Typewriter effect: every mono line (dissolve caption, all 5 warning lines, the glitch-calm line, the mask's mono line) types itself character by character, scrub-synced to scroll (retypes on the way back down, untypes going up), with a per-character key-clack when sound is on. Serif/coda lines keep soft fades — tonal contrast preserved.
+- Rain layer: optional faint rain (looped shaped noise, lowpassed with patter top) behind its own cloud-rain toggle that only appears while ambient sound is on; off by default.
+- Vinyl crackle: sparse random pops start when the coda scene is reached (ScrollTrigger in cinematic, IntersectionObserver in static) and stop if you scroll back above it; silent unless sound is on.
+- Dedication line: footer carries "for s., obviously." in dim serif italic — one-line config (`SCRIPT.dedication` in lib/content.js), no accounts.
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).
