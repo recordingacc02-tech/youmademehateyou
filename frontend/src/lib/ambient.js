@@ -139,6 +139,7 @@ export const toggleAmbient = () => {
   master.gain.linearRampToValueAtTime(on ? 1 : 0, now + 1.4);
   if (on) {
     pianoTimer = setTimeout(scheduleNote, 1600);
+    if (window.scrollY < window.innerHeight * 0.6) setTimeout(letterInNote, 900);
   } else if (pianoTimer) {
     clearTimeout(pianoTimer);
   }
@@ -218,6 +219,26 @@ export const setCrackle = (v) => {
   } else if (crackleTimer) {
     clearTimeout(crackleTimer);
   }
+};
+
+let lastLetterIn = 0;
+
+export const letterInNote = () => {
+  if (!on || !ctx) return;
+  const buf = buffers.A2;
+  if (!buf) return;
+  const nowMs = Date.now();
+  if (nowMs - lastLetterIn < 8000) return;
+  lastLetterIn = nowMs;
+  const t = ctx.currentTime + 0.05;
+  const src = ctx.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = 0.5;
+  const g = ctx.createGain();
+  g.gain.value = 0.5;
+  src.connect(g);
+  g.connect(pianoBus);
+  src.start(t);
 };
 
 const noiseBurst = (t, { freq, q, gain, dur }) => {

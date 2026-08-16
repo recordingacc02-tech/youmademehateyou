@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate } from 'animejs';
 import { SCRIPT } from '../lib/content';
-import { clack, setCrackle } from '../lib/ambient';
+import { clack, letterInNote, setCrackle } from '../lib/ambient';
 import { Footer } from './Footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -27,7 +27,16 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       const typeLine = (tl, selector, text, at, dur) => {
         const el = rootRef.current.querySelector(selector);
         if (!el) return;
+        let cursor = el.querySelector(':scope > .type-cursor');
+        if (!cursor) {
+          cursor = document.createElement('span');
+          cursor.className = 'type-cursor';
+          cursor.textContent = '▍';
+        }
         el.textContent = '';
+        const textNode = document.createTextNode('');
+        el.appendChild(textNode);
+        el.appendChild(cursor);
         const state = { n: 0 };
         let prev = 0;
         tl.to(
@@ -39,7 +48,8 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
             onUpdate: () => {
               const count = Math.round(state.n);
               if (count === prev) return;
-              el.textContent = text.slice(0, count);
+              textNode.nodeValue = text.slice(0, count);
+              cursor.style.visibility = count > 0 && count < text.length ? 'visible' : 'hidden';
               if (count > prev) clack();
               prev = count;
             },
@@ -179,6 +189,12 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .to({}, { duration: 0.8 }, 10.4);
 
       codaTriggerRef.current = s4.scrollTrigger;
+
+      ScrollTrigger.create({
+        trigger: '.scene-letters',
+        start: 'top top',
+        onEnterBack: letterInNote,
+      });
 
       ScrollTrigger.create({
         trigger: '.scene-warning',

@@ -158,3 +158,10 @@ body {
     vertical-align: bottom;
     width: 0;
 }
+
+.type-cursor {
+    visibility: hidden;
+    margin-left: 1px;
+    color: rgba(255, 255, 255, 0.55);
+    animation: cursor-blink 0.9s steps(1) infinite;
+}

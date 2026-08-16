@@ -65,6 +65,11 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Vinyl crackle: sparse random pops start when the coda scene is reached (ScrollTrigger in cinematic, IntersectionObserver in static) and stop if you scroll back above it; silent unless sound is on.
 - Dedication line: footer carries "for s., obviously." in dim serif italic — one-line config (`SCRIPT.dedication` in lib/content.js), no accounts.
 
+### 2026-07 (iteration 8 — user requested)
+- Typing cursor: thin blinking block cursor (▍) injected by the typewriter engine at the tip of every line while it's mid-type; hidden before typing starts and after the line completes (visibility-toggled so the blink animation can't override it).
+- Letter-in sound: a single deep piano note (A2 sample at half rate = A1, 55Hz) sounds when ambient is switched on while the giant R & S are on screen, and again when you scroll back up to the letters (8s cooldown).
+- Rain on glass: fixed canvas overlay draws faint droplet trails that slide and self-erase (destination-out fade keeps text readable); runs only while the rain layer is on, fades in/out over 2s.
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).

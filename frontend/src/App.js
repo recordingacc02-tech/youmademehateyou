@@ -5,6 +5,8 @@ import { CinematicExperience } from '@/components/CinematicExperience';
 import { StaticExperience } from '@/components/StaticExperience';
 import { Controls } from '@/components/Controls';
 import { backspaceClack, clack, enterClack } from '@/lib/ambient';
+import { useAudioHum } from '@/hooks/useAudioHum';
+import { RainCanvas } from '@/components/RainCanvas';
 import '@/App.css';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -12,6 +14,7 @@ let viewCounted = false;
 let codaCounted = false;
 
 function App() {
+  const { rainOn } = useAudioHum();
   const [count, setCount] = useState(null);
   const [codaCount, setCodaCount] = useState(null);
   const [reduced] = useState(
@@ -55,6 +58,7 @@ function App() {
   return (
     <div className="App" data-testid="app-root">
       <div className="grain-overlay" aria-hidden="true" />
+      <RainCanvas active={rainOn} />
       {reduced ? <StaticExperience {...shared} /> : <CinematicExperience {...shared} />}
       <Controls />
       <Toaster
