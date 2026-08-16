@@ -44,6 +44,11 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - `#coda` deep-link: opening the URL with #coda jumps straight to the coda's black silence (instant, double-asserted to beat native fragment scrolling). Footer gained a "skip to the coda" shortcut that smooth-scrolls there and sets the hash for sharing. Static/reduced-motion version supports #coda natively via section id.
 - Counter reset to 0 again after verification.
 
+### 2026-07 (iteration 4 — user requested)
+- Footer gained "pass on just the ending" — a quieter share link that copies the URL with #coda already appended.
+- Every warning line now lands with its own faint key-clack (timeline calls in the scrubbed warning scene, slight random pitch jitter per clack so it sounds like real typing); fires forward and on scroll-back, silent unless ambient sound is on.
+- Hardened clipboard sharing with an execCommand fallback (navigator.clipboard can be blocked without a trusted gesture).
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).

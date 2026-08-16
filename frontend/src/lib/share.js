@@ -1,5 +1,27 @@
 import { toast } from 'sonner';
 
+const copyText = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus();
+      ta.select();
+      const ok = document.execCommand('copy');
+      document.body.removeChild(ta);
+      return ok;
+    } catch {
+      return false;
+    }
+  }
+};
+
 export const shareNotice = async () => {
   const url = window.location.href;
   if (navigator.share) {
@@ -14,10 +36,14 @@ export const shareNotice = async () => {
     }
     return;
   }
-  try {
-    await navigator.clipboard.writeText(url);
-    toast('link copied. pass it on quietly.');
-  } catch {
-    toast('copy failed — the address bar works too.');
-  }
+  toast((await copyText(url)) ? 'link copied. pass it on quietly.' : 'copy failed — the address bar works too.');
+};
+
+export const shareCoda = async () => {
+  const url = `${window.location.origin}${window.location.pathname}#coda`;
+  toast(
+    (await copyText(url))
+      ? 'coda link copied. for someone who already read it once.'
+      : 'copy failed — the address bar works too.'
+  );
 };

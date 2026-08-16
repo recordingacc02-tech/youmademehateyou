@@ -73,6 +73,7 @@ export const CinematicExperience = ({ count }) => {
       );
       SCRIPT.warningLines.forEach((_, i) => {
         const at = 0.6 + i * 1.9;
+        s2.call(() => clack(), [], at + 0.12);
         s2.fromTo(
           `.warn-line-${i}`,
           { autoAlpha: 0, y: 26 },

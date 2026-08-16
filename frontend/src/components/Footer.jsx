@@ -1,4 +1,4 @@
-import { shareNotice } from '../lib/share';
+import { shareNotice, shareCoda } from '../lib/share';
 
 export const Footer = ({ count, onSkipToCoda }) => (
   <footer
@@ -37,6 +37,13 @@ export const Footer = ({ count, onSkipToCoda }) => (
         skip to the coda
       </button>
     )}
+    <button
+      data-testid="footer-coda-share-button"
+      onClick={shareCoda}
+      className="font-mono-notice text-[9px] tracking-[0.3em] uppercase text-[#2e2e2e] hover:text-[#8a7a6a] transition-colors duration-300"
+    >
+      pass on just the ending
+    </button>
     <p className="font-mono-notice text-[9px] tracking-[0.25em] uppercase text-[#2e2e2e]">
       — r
     </p>

@@ -117,7 +117,7 @@ export const clack = () => {
   src.buffer = buf;
   const bp = ac.createBiquadFilter();
   bp.type = 'bandpass';
-  bp.frequency.value = 1900;
+  bp.frequency.value = 1600 + Math.random() * 600;
   bp.Q.value = 1.2;
   const g = ac.createGain();
   g.gain.setValueAtTime(0.12, t);
@@ -128,7 +128,7 @@ export const clack = () => {
   src.start(t);
   const o = ac.createOscillator();
   o.type = 'sine';
-  o.frequency.setValueAtTime(210, t);
+  o.frequency.setValueAtTime(185 + Math.random() * 50, t);
   o.frequency.exponentialRampToValueAtTime(90, t + 0.07);
   const og = ac.createGain();
   og.gain.setValueAtTime(0.08, t);
