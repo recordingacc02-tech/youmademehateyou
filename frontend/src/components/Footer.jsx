@@ -1,6 +1,6 @@
 import { shareNotice } from '../lib/share';
 
-export const Footer = ({ count }) => (
+export const Footer = ({ count, onSkipToCoda }) => (
   <footer
     className="relative bg-black min-h-[55vh] flex flex-col items-center justify-center gap-7 px-6"
     data-testid="notice-footer"
@@ -28,6 +28,15 @@ export const Footer = ({ count }) => (
     >
       read it again
     </button>
+    {onSkipToCoda && (
+      <button
+        data-testid="coda-skip-button"
+        onClick={onSkipToCoda}
+        className="font-mono-notice text-[9px] tracking-[0.3em] uppercase text-[#333] hover:text-[#8a7a6a] transition-colors duration-300"
+      >
+        skip to the coda
+      </button>
+    )}
     <p className="font-mono-notice text-[9px] tracking-[0.25em] uppercase text-[#2e2e2e]">
       — r
     </p>

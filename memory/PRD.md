@@ -38,6 +38,12 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Footer "read it again" replay button — smooth-glides back to the top.
 - Witness counter reset to 0 for the first real reader.
 
+### 2026-07 (iteration 3 — user requested)
+- Hazard-notice chrome now rubber-stamps in (fast scale 1.14 → 1, power4) when the warning scene begins, paired with a faint synthesized typewriter clack (bandpassed noise burst + low thock) that fires only when ambient sound is on.
+- Audio engine refactored to a module singleton (`lib/ambient.js`) so scenes can trigger sound design; `useAudioHum` is now a thin subscribing wrapper.
+- `#coda` deep-link: opening the URL with #coda jumps straight to the coda's black silence (instant, double-asserted to beat native fragment scrolling). Footer gained a "skip to the coda" shortcut that smooth-scrolls there and sets the hash for sharing. Static/reduced-motion version supports #coda natively via section id.
+- Counter reset to 0 again after verification.
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).

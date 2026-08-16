@@ -51,7 +51,7 @@ export const StaticExperience = ({ count }) => (
       <span className="font-serif-human font-light text-[24vw] md:text-[13vw] text-[#8a7a6a]" data-testid="mask-r-dot">R.</span>
     </section>
 
-    <section className="min-h-[160vh] bg-black flex flex-col items-center justify-center gap-[16vh] px-8" data-testid="scene-coda">
+    <section id="coda" className="min-h-[160vh] bg-black flex flex-col items-center justify-center gap-[16vh] px-8" data-testid="scene-coda">
       <p className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed max-w-[26ch]" data-testid="coda-line-1">
         {SCRIPT.coda1}
       </p>

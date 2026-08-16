@@ -3,6 +3,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { animate } from 'animejs';
 import { SCRIPT } from '../lib/content';
+import { clack } from '../lib/ambient';
 import { Footer } from './Footer';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -13,6 +14,7 @@ export const CinematicExperience = ({ count }) => {
   const rootRef = useRef(null);
   const progressRef = useRef(null);
   const flickerPlayed = useRef(false);
+  const codaTriggerRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
@@ -63,7 +65,12 @@ export const CinematicExperience = ({ count }) => {
           anticipatePin: 1,
         },
       });
-      s2.fromTo('.notice-chrome', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0);
+      s2.fromTo(
+        '.notice-chrome',
+        { opacity: 0, scale: 1.14 },
+        { opacity: 1, scale: 1, duration: 0.18, ease: 'power4.out' },
+        0
+      );
       SCRIPT.warningLines.forEach((_, i) => {
         const at = 0.6 + i * 1.9;
         s2.fromTo(
@@ -142,6 +149,25 @@ export const CinematicExperience = ({ count }) => {
         .set('.coda-cursor', { css: { animationName: 'cursor-heartbeat', animationDuration: '1.3s' } }, 8.5)
         .to('.coda-line-3', { autoAlpha: 0, duration: 1.2 }, 9.2)
         .to({}, { duration: 0.8 }, 10.4);
+
+      codaTriggerRef.current = s4.scrollTrigger;
+
+      ScrollTrigger.create({
+        trigger: '.scene-warning',
+        start: 'top top',
+        onEnter: clack,
+      });
+
+      if (window.location.hash === '#coda') {
+        const jumpToCoda = () => {
+          ScrollTrigger.refresh();
+          if (codaTriggerRef.current) {
+            window.scrollTo(0, codaTriggerRef.current.start + 120);
+          }
+        };
+        requestAnimationFrame(jumpToCoda);
+        setTimeout(jumpToCoda, 800);
+      }
     }, rootRef);
 
     return () => ctx.revert();
@@ -276,7 +302,15 @@ export const CinematicExperience = ({ count }) => {
         </span>
       </section>
 
-      <Footer count={count} />
+      <Footer
+        count={count}
+        onSkipToCoda={() => {
+          window.history.replaceState(null, '', '#coda');
+          if (codaTriggerRef.current) {
+            window.scrollTo({ top: codaTriggerRef.current.start + 120, behavior: 'smooth' });
+          }
+        }}
+      />
     </div>
   );
 };
