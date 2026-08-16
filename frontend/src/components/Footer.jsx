@@ -19,6 +19,14 @@ export const Footer = ({ count, codaCount, onSkipToCoda }) => (
         </span>
       )}
     </p>
+    {count != null && codaCount != null && count >= 10 && codaCount / count < 0.5 && (
+      <p
+        className="font-mono-notice text-[8px] md:text-[9px] tracking-[0.3em] text-[#2b2b2b] text-center"
+        data-testid="witness-ratio"
+      >
+        most don't make it to the end
+      </p>
+    )}
     <button
       data-testid="footer-share-button"
       onClick={shareNotice}

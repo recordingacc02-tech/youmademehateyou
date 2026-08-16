@@ -4,7 +4,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { CinematicExperience } from '@/components/CinematicExperience';
 import { StaticExperience } from '@/components/StaticExperience';
 import { Controls } from '@/components/Controls';
-import { clack } from '@/lib/ambient';
+import { backspaceClack, clack, enterClack } from '@/lib/ambient';
 import '@/App.css';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -33,7 +33,9 @@ function App() {
   useEffect(() => {
     const onKey = (e) => {
       if (e.metaKey || e.ctrlKey || e.altKey) return;
-      clack();
+      if (e.key === 'Backspace') backspaceClack();
+      else if (e.key === 'Enter') enterClack();
+      else clack();
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);

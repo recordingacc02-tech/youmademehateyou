@@ -54,6 +54,11 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Spacebar typewriter: every keypress anywhere on the page fires a soft clack (variation built in) while ambient sound is on; modifier shortcuts (cmd/ctrl/alt) are ignored. No-op when sound is off.
 - Both counters reset to 0 after verification.
 
+### 2026-07 (iteration 6 — user requested)
+- Real recorded piano: 9 Salamander-style grand piano samples (FatBoy soundfont, A2–A4) in `public/audio/piano/`, decoded into WebAudio buffers and played with random soft velocity + octave-down chance through the existing delay space. Synthesized oscillator notes remain as fallback until/if samples aren't loaded yet.
+- Witness ratio whisper: when witnesses ≥ 10 and fewer than half reach the coda, the footer adds a near-invisible line — "most don't make it to the end".
+- Distinct editing clacks: Backspace is a lower, duller crunch; Enter is a heavier knock followed by a carriage-return thock; all other keys keep the standard clack.
+
 ## Verified
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).

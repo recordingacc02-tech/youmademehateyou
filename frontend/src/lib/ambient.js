@@ -1,18 +1,41 @@
-const PIANO_NOTES = [220, 246.94, 261.63, 293.66, 329.63, 392, 440];
+const PIANO_SAMPLES = [
+  { file: 'A2', freq: 110 },
+  { file: 'C3', freq: 130.81 },
+  { file: 'A3', freq: 220 },
+  { file: 'B3', freq: 246.94 },
+  { file: 'C4', freq: 261.63 },
+  { file: 'D4', freq: 293.66 },
+  { file: 'E4', freq: 329.63 },
+  { file: 'G4', freq: 392 },
+  { file: 'A4', freq: 440 },
+];
 
 let ctx = null;
 let master = null;
 let pianoBus = null;
 let pianoTimer = null;
 let on = false;
+const buffers = {};
+let samplesRequested = false;
 const listeners = new Set();
 
 const notify = () => listeners.forEach((fn) => fn(on));
 
-const scheduleNote = () => {
-  if (!on || !ctx) return;
-  const ac = ctx;
-  const f = PIANO_NOTES[Math.floor(Math.random() * PIANO_NOTES.length)] * (Math.random() < 0.22 ? 0.5 : 1);
+const loadSamples = () => {
+  if (samplesRequested || !ctx) return;
+  samplesRequested = true;
+  PIANO_SAMPLES.forEach(({ file }) => {
+    fetch(`/audio/piano/${file}.mp3`)
+      .then((r) => r.arrayBuffer())
+      .then((ab) => ctx.decodeAudioData(ab))
+      .then((buf) => {
+        buffers[file] = buf;
+      })
+      .catch(() => {});
+  });
+};
+
+const playSynthNote = (ac, f) => {
   const t = ac.currentTime + 0.06;
   const env = ac.createGain();
   env.gain.setValueAtTime(0, t);
@@ -34,6 +57,30 @@ const scheduleNote = () => {
   high.start(t);
   low.stop(t + 3.6);
   high.stop(t + 3.6);
+};
+
+const playSampleNote = (ac, entry, octaveDown) => {
+  const buf = buffers[entry.file];
+  if (!buf) return false;
+  const t = ac.currentTime + 0.05;
+  const src = ac.createBufferSource();
+  src.buffer = buf;
+  src.playbackRate.value = octaveDown ? 0.5 : 1;
+  const g = ac.createGain();
+  g.gain.value = 0.26 + Math.random() * 0.12;
+  src.connect(g);
+  g.connect(pianoBus);
+  src.start(t);
+  return true;
+};
+
+const scheduleNote = () => {
+  if (!on || !ctx) return;
+  const entry = PIANO_SAMPLES[Math.floor(Math.random() * PIANO_SAMPLES.length)];
+  const octaveDown = Math.random() < 0.22;
+  if (!playSampleNote(ctx, entry, octaveDown)) {
+    playSynthNote(ctx, entry.freq * (octaveDown ? 0.5 : 1));
+  }
   pianoTimer = setTimeout(scheduleNote, 3200 + Math.random() * 3800);
 };
 
@@ -78,6 +125,7 @@ const buildGraph = () => {
   wet.connect(master);
 
   ctx = ac;
+  loadSamples();
   return true;
 };
 
@@ -105,36 +153,58 @@ export const onAmbientChange = (fn) => {
   return () => listeners.delete(fn);
 };
 
-export const clack = () => {
-  if (!on || !ctx) return;
-  const ac = ctx;
-  const t = ac.currentTime + 0.02;
-  const len = Math.floor(ac.sampleRate * 0.09);
-  const buf = ac.createBuffer(1, len, ac.sampleRate);
+const noiseBurst = (t, { freq, q, gain, dur }) => {
+  const len = Math.floor(ctx.sampleRate * dur);
+  const buf = ctx.createBuffer(1, len, ctx.sampleRate);
   const data = buf.getChannelData(0);
   for (let i = 0; i < len; i += 1) data[i] = (Math.random() * 2 - 1) * (1 - i / len) ** 2;
-  const src = ac.createBufferSource();
+  const src = ctx.createBufferSource();
   src.buffer = buf;
-  const bp = ac.createBiquadFilter();
+  const bp = ctx.createBiquadFilter();
   bp.type = 'bandpass';
-  bp.frequency.value = 1600 + Math.random() * 600;
-  bp.Q.value = 1.2;
-  const g = ac.createGain();
-  g.gain.setValueAtTime(0.12, t);
-  g.gain.exponentialRampToValueAtTime(0.001, t + 0.09);
+  bp.frequency.value = freq;
+  bp.Q.value = q;
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(gain, t);
+  g.gain.exponentialRampToValueAtTime(0.001, t + dur);
   src.connect(bp);
   bp.connect(g);
   g.connect(master);
   src.start(t);
-  const o = ac.createOscillator();
+};
+
+const thock = (t, { from, to, gain, dur }) => {
+  const o = ctx.createOscillator();
   o.type = 'sine';
-  o.frequency.setValueAtTime(185 + Math.random() * 50, t);
-  o.frequency.exponentialRampToValueAtTime(90, t + 0.07);
-  const og = ac.createGain();
-  og.gain.setValueAtTime(0.08, t);
-  og.gain.exponentialRampToValueAtTime(0.001, t + 0.08);
+  o.frequency.setValueAtTime(from, t);
+  o.frequency.exponentialRampToValueAtTime(to, t + dur * 0.8);
+  const og = ctx.createGain();
+  og.gain.setValueAtTime(gain, t);
+  og.gain.exponentialRampToValueAtTime(0.001, t + dur);
   o.connect(og);
   og.connect(master);
   o.start(t);
-  o.stop(t + 0.1);
+  o.stop(t + dur + 0.02);
+};
+
+export const clack = () => {
+  if (!on || !ctx) return;
+  const t = ctx.currentTime + 0.02;
+  noiseBurst(t, { freq: 1600 + Math.random() * 600, q: 1.2, gain: 0.12, dur: 0.09 });
+  thock(t, { from: 185 + Math.random() * 50, to: 90, gain: 0.08, dur: 0.07 });
+};
+
+export const backspaceClack = () => {
+  if (!on || !ctx) return;
+  const t = ctx.currentTime + 0.02;
+  noiseBurst(t, { freq: 520 + Math.random() * 260, q: 0.8, gain: 0.16, dur: 0.14 });
+  thock(t, { from: 120 + Math.random() * 30, to: 55, gain: 0.11, dur: 0.12 });
+};
+
+export const enterClack = () => {
+  if (!on || !ctx) return;
+  const t = ctx.currentTime + 0.02;
+  noiseBurst(t, { freq: 1300 + Math.random() * 300, q: 1.4, gain: 0.13, dur: 0.1 });
+  thock(t, { from: 150, to: 70, gain: 0.1, dur: 0.09 });
+  thock(t + 0.07, { from: 85, to: 45, gain: 0.09, dur: 0.14 });
 };
