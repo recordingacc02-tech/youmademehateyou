@@ -5,6 +5,11 @@ import { animate } from 'animejs';
 import { SCRIPT } from '../lib/content';
 import { clack, letterInNote, setCrackle } from '../lib/ambient';
 import { Footer } from './Footer';
+import { SDissolve } from './SDissolve';
+import { RedThread } from './RedThread';
+import { HazardLayer } from './HazardLayer';
+import { MaskFigure } from './MaskFigure';
+import { HeartbeatLine } from './HeartbeatLine';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -120,12 +125,31 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       s2.fromTo('.glitch-calm', { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.5 }, g0)
         .to('.glitch-calm', { autoAlpha: 0, duration: 0.06 }, g0 + 1.0)
         .fromTo('.glitch-break', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.05 }, g0 + 1.06)
+        .fromTo('.glitch-cracks', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.05 }, g0 + 1.06)
         .to('.glitch-break', { autoAlpha: 0, duration: 0.06 }, g0 + 1.6)
+        .to('.glitch-cracks', { autoAlpha: 0, duration: 0.06 }, g0 + 1.6)
         .fromTo('.glitch-after', { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, g0 + 1.75)
         .to('.glitch-after', { autoAlpha: 0, duration: 0.4 }, g0 + 2.6)
         .to('.notice-chrome', { opacity: 0, duration: 0.4 }, g0 + 2.7)
         .to({}, { duration: 0.3 }, g0 + 3.0);
       typeLine(s2, '.glitch-calm span', SCRIPT.glitchCalm, g0 + 0.05, 0.7);
+
+      const hz = { n: 10 };
+      const hzEl = rootRef.current.querySelector('[data-testid="countdown-number"]');
+      s2.fromTo('.hazard-tape', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 0)
+        .to(
+          hz,
+          {
+            n: 0,
+            duration: 10,
+            ease: 'none',
+            onUpdate: () => {
+              if (hzEl) hzEl.textContent = String(Math.round(hz.n)).padStart(2, '0');
+            },
+          },
+          0.4
+        )
+        .to('.hazard-tape', { opacity: 0, duration: 0.4 }, g0 + 2.7);
 
       // SCENE 3 — the mask slips
       const s3 = gsap.timeline({
@@ -154,6 +178,32 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .to('.mask-r-dot', { autoAlpha: 0, duration: 0.8 }, 6.8)
         .to({}, { duration: 0.6 }, 7.6);
       typeLine(s3, '.mask-line-1 span', SCRIPT.maskLine1, 0.8, 1.4);
+
+      const maskOutlineEl = rootRef.current.querySelector('.mask-outline');
+      const maskCrackEls = rootRef.current.querySelectorAll('.mask-crack');
+      const maskDraw = { o: 1, c: 1 };
+      s3.to(
+        maskDraw,
+        {
+          o: 0,
+          duration: 1.2,
+          ease: 'none',
+          onUpdate: () => maskOutlineEl && maskOutlineEl.setAttribute('stroke-dashoffset', maskDraw.o),
+        },
+        0.1
+      )
+        .fromTo('.mask-eye', { opacity: 0 }, { opacity: 0.8, duration: 0.4 }, 0.9)
+        .to(
+          maskDraw,
+          {
+            c: 0,
+            duration: 0.75,
+            ease: 'none',
+            onUpdate: () => maskCrackEls.forEach((el) => el.setAttribute('stroke-dashoffset', maskDraw.c)),
+          },
+          3.6
+        )
+        .to('.mask-figure', { rotate: 14, y: '42vh', opacity: 0, duration: 1.3, ease: 'power1.in' }, 5.2);
 
       // SCENE 4 — fake end, long silence, the coda
       const s4 = gsap.timeline({
@@ -187,6 +237,19 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
         .set('.coda-cursor', { css: { animationName: 'cursor-heartbeat', animationDuration: '1.3s' } }, 8.5)
         .to('.coda-line-3', { autoAlpha: 0, duration: 1.2 }, 9.2)
         .to({}, { duration: 0.8 }, 10.4);
+
+      const ekgEl = rootRef.current.querySelector('.ekg-path');
+      const ekgDraw = { v: 1 };
+      s4.to(
+        ekgDraw,
+        {
+          v: 0,
+          duration: 5.6,
+          ease: 'none',
+          onUpdate: () => ekgEl && ekgEl.setAttribute('stroke-dashoffset', ekgDraw.v),
+        },
+        1.4
+      ).to('.ekg-path', { opacity: 0, duration: 1.0 }, 8.6);
 
       codaTriggerRef.current = s4.scrollTrigger;
 
@@ -236,6 +299,8 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       />
 
       <section className="scene-letters relative h-screen w-full overflow-hidden" data-testid="scene-letters">
+        <RedThread />
+        <SDissolve />
         <div className="absolute inset-0 flex items-center justify-center">
           <div
             className="flex items-baseline font-serif-human font-light leading-none tracking-tighter text-[#E8D8C8]"
@@ -266,6 +331,20 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       </section>
 
       <section className="scene-warning relative h-screen w-full overflow-hidden" data-testid="scene-warning">
+        <HazardLayer />
+        <svg
+          className="glitch-cracks absolute inset-0 w-full h-full opacity-0 pointer-events-none"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+          aria-hidden="true"
+          data-testid="glitch-cracks"
+        >
+          <path d="M52,0 L47,20 L55,37 L44,58 L53,79 L48,100" stroke="white" strokeOpacity="0.45" strokeWidth="0.16" fill="none" />
+          <path d="M0,44 L26,47 L44,58" stroke="white" strokeOpacity="0.3" strokeWidth="0.12" fill="none" />
+          <path d="M100,28 L72,39 L55,37" stroke="white" strokeOpacity="0.3" strokeWidth="0.12" fill="none" />
+          <path d="M47,20 L38,12 L33,0" stroke="white" strokeOpacity="0.22" strokeWidth="0.1" fill="none" />
+          <path d="M53,79 L66,88 L70,100" stroke="white" strokeOpacity="0.22" strokeWidth="0.1" fill="none" />
+        </svg>
         <div className="notice-chrome absolute top-0 inset-x-0 flex justify-between pl-6 md:pl-10 pr-20 pt-6 opacity-0">
           <span className="font-mono-notice text-[10px] md:text-xs tracking-[0.3em] uppercase text-white/40">
             {SCRIPT.chromeLeft}
@@ -306,6 +385,7 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       </section>
 
       <section className="scene-mask relative h-screen w-full overflow-hidden" data-testid="scene-mask">
+        <MaskFigure />
         <span
           className="ghost-r absolute inset-0 flex items-center justify-center font-serif-human text-[70vw] md:text-[40vw] leading-none text-[#E8D8C8] opacity-0 select-none"
           aria-hidden="true"
@@ -331,6 +411,7 @@ export const CinematicExperience = ({ count, codaCount, onCodaReached }) => {
       </section>
 
       <section className="scene-coda relative h-screen w-full overflow-hidden bg-black" data-testid="scene-coda">
+        <HeartbeatLine />
         <p className="coda-line-1 absolute inset-0 flex items-center justify-center px-8 opacity-0" data-testid="coda-line-1">
           <span className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed max-w-[26ch]">
             {SCRIPT.coda1}

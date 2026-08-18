@@ -2,6 +2,8 @@ import { useEffect } from 'react';
 import { SCRIPT } from '../lib/content';
 import { setCrackle } from '../lib/ambient';
 import { Footer } from './Footer';
+import { MaskFigure } from './MaskFigure';
+import { HeartbeatLine } from './HeartbeatLine';
 
 export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
   useEffect(() => {
@@ -63,6 +65,9 @@ export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
     </section>
 
     <section className="min-h-screen flex flex-col items-center justify-center gap-[14vh] px-8" data-testid="scene-mask">
+      <div className="relative h-[46vmin] w-full">
+        <MaskFigure isStatic />
+      </div>
       <p className="font-mono-notice font-light text-sm md:text-lg tracking-[0.12em] leading-loose text-white/80 text-center max-w-[38ch]" data-testid="mask-line-1">
         {SCRIPT.maskLine1}
       </p>
@@ -73,6 +78,9 @@ export const StaticExperience = ({ count, codaCount, onCodaReached }) => {
     </section>
 
     <section id="coda" className="min-h-[160vh] bg-black flex flex-col items-center justify-center gap-[16vh] px-8" data-testid="scene-coda">
+      <div className="relative h-[30vh] w-full">
+        <HeartbeatLine isStatic />
+      </div>
       <p className="font-serif-human font-light text-2xl md:text-4xl text-[#C5B2A1] text-center leading-relaxed max-w-[26ch]" data-testid="coda-line-1">
         {SCRIPT.coda1}
       </p>

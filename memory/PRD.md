@@ -70,7 +70,15 @@ A single-page, scroll-driven cinematic web experience: an anonymous "warning not
 - Letter-in sound: a single deep piano note (A2 sample at half rate = A1, 55Hz) sounds when ambient is switched on while the giant R & S are on screen, and again when you scroll back up to the letters (8s cooldown).
 - Rain on glass: fixed canvas overlay draws faint droplet trails that slide and self-erase (destination-out fade keeps text readable); runs only while the rain layer is on, fades in/out over 2s.
 
-## Verified
+### 2026-06 (iteration 9 — "make it FULL visual" pivot)
+- Scene 1: crimson red-thread-of-fate canvas drawn live between R and S — sags and sways while together, snaps into two falling dangles when S leaves; S also disintegrates into ~420 drifting dust particles (canvas sampling of the actual glyph) as it exits; global ambient dust-mote canvas behind everything.
+- Scene 2: hazard-tape stripes rubber-stamp in top/bottom, a giant ghost countdown (10 → 00) ticks down behind the warning lines in sync with scroll, and the glitch burst now fires jagged white screen-crack lines across the viewport with the "I HOPE HE'S—" flash.
+- Scene 3: hand-drawn porcelain mask (SVG) traces itself in line-by-line, eyes appear, cracks spider across it during "no one", then the whole mask tips and falls away as "R." appears.
+- Scene 4: EKG heartbeat line draws across the coda — flat, small blips, one big spike ("my heart jumps"), then flatlines and fades to black.
+- Static/reduced-motion version renders the cracked mask and full EKG inline.
+- Technical: child ScrollTriggers inside pinned scenes desynced (didn't account for earlier pin spacers) — all visual beats are now driven from the parent pinned timelines; SVG stroke draws use proxy tweens setting stroke-dashoffset attributes (GSAP CSS interpolation of the property snapped instead of tweening).
+
+
 - curl: `GET /api/`, `POST /api/views` increments, `GET /api/views` reads, counter reset to 0 confirmed.
 - `curl -I /og-image.png` served (200, image/png).
 - Screenshots (desktop + mobile): hero at full-screen scale, warning lines, glitch burst, mask serif, "R.", coda, dots + cursor, footer with replay button.

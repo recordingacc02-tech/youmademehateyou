@@ -7,6 +7,7 @@ import { Controls } from '@/components/Controls';
 import { backspaceClack, clack, enterClack } from '@/lib/ambient';
 import { useAudioHum } from '@/hooks/useAudioHum';
 import { RainCanvas } from '@/components/RainCanvas';
+import { DustCanvas } from '@/components/DustCanvas';
 import '@/App.css';
 
 const API = `${process.env.REACT_APP_BACKEND_URL}/api`;
@@ -58,6 +59,7 @@ function App() {
   return (
     <div className="App" data-testid="app-root">
       <div className="grain-overlay" aria-hidden="true" />
+      <DustCanvas />
       <RainCanvas active={rainOn} />
       {reduced ? <StaticExperience {...shared} /> : <CinematicExperience {...shared} />}
       <Controls />
